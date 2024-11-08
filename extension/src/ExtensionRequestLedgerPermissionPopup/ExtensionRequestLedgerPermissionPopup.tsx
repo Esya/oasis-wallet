@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useDispatch } from 'react-redux'
 import { Box } from 'grommet/es6/components/Box'
 import { Button } from 'grommet/es6/components/Button'
 import { Spinner } from 'grommet/es6/components/Spinner'
@@ -11,10 +10,8 @@ import { Header } from 'app/components/Header'
 import { ErrorFormatter } from 'app/components/ErrorFormatter'
 import { AlertBox } from 'app/components/AlertBox'
 import { WalletErrors } from 'types/errors'
-import { importAccountsActions } from 'app/state/importaccounts'
 import { requestDevice } from 'app/lib/ledger'
-import logotype from '../../../../public/Icon Blue 192.png'
-import { WalletType } from '../../state/wallet/types'
+import logotype from '../../../public/Icon Blue 192.png'
 
 type ConnectionStatus = 'connected' | 'disconnected' | 'connecting' | 'error'
 type ConnectionStatusIconPros = {
@@ -44,9 +41,9 @@ function ConnectionStatusIcon({ success = true, label, withMargin = false }: Con
   )
 }
 
-export function ConnectDevicePage() {
+// TODO rename again to ExtLedgerAccessPopup to match openLedgerAccessPopup
+export function ExtensionRequestLedgerPermissionPopup() {
   const { t } = useTranslation()
-  const dispatch = useDispatch()
   const [connection, setConnection] = useState<ConnectionStatus>('disconnected')
   const handleConnect = async () => {
     setConnection('connecting')
@@ -54,7 +51,6 @@ export function ConnectDevicePage() {
       const device = await requestDevice()
       if (device) {
         setConnection('connected')
-        dispatch(importAccountsActions.enumerateAccountsFromLedger(WalletType.UsbLedger))
       }
     } catch {
       setConnection('error')
